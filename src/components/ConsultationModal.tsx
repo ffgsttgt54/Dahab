@@ -6,9 +6,10 @@ interface ConsultationModalProps {
   onClose: () => void;
   dictionary: any;
   isRtl: boolean;
+  showToast?: (message: string, type?: "success" | "error" | "info") => void;
 }
 
-export default function ConsultationModal({ isOpen, onClose, dictionary, isRtl }: ConsultationModalProps) {
+export default function ConsultationModal({ isOpen, onClose, dictionary, isRtl, showToast }: ConsultationModalProps) {
   const [formData, setFormData] = useState({ name: "", email: "", date: "", timeSlot: "16:00" });
   const [isSubmitted, setIsSubmitted] = useState(false);
 
@@ -24,6 +25,12 @@ export default function ConsultationModal({ isOpen, onClose, dictionary, isRtl }
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitted(true);
+    if (showToast) {
+      const msg = isRtl
+        ? `شكرًا لك يا ${formData.name}! تم حجز موعد الاستشارة الخاصة بك بتاريخ ${formData.date} بنجاح.`
+        : `Thank you, ${formData.name}! Your video consultation slot for ${formData.date} has been reserved successfully.`;
+      showToast(msg, "success");
+    }
   };
 
   return (

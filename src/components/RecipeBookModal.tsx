@@ -6,9 +6,10 @@ interface RecipeBookModalProps {
   onClose: () => void;
   dictionary: any;
   isRtl: boolean;
+  showToast?: (message: string, type?: "success" | "error" | "info") => void;
 }
 
-export default function RecipeBookModal({ isOpen, onClose, dictionary, isRtl }: RecipeBookModalProps) {
+export default function RecipeBookModal({ isOpen, onClose, dictionary, isRtl, showToast }: RecipeBookModalProps) {
   const [isDownloaded, setIsDownloaded] = useState(false);
 
   React.useEffect(() => {
@@ -30,6 +31,12 @@ export default function RecipeBookModal({ isOpen, onClose, dictionary, isRtl }: 
     setTimeout(() => {
       document.body.removeChild(link);
     }, 100);
+    if (showToast) {
+      const msg = isRtl
+        ? "بدأ تحميل كتاب وصفات كمال الأجسام بنجاح! بالهناء والشفاء."
+        : "Your Elite Recipe Book download has started successfully! Bon appétit.";
+      showToast(msg, "success");
+    }
   };
 
   const sampleRecipes = [

@@ -6,9 +6,10 @@ interface ContactModalProps {
   onClose: () => void;
   dictionary: any;
   isRtl: boolean;
+  showToast?: (message: string, type?: "success" | "error" | "info") => void;
 }
 
-export default function ContactModal({ isOpen, onClose, dictionary, isRtl }: ContactModalProps) {
+export default function ContactModal({ isOpen, onClose, dictionary, isRtl, showToast }: ContactModalProps) {
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
   const [isSubmitted, setIsSubmitted] = useState(false);
 
@@ -24,6 +25,12 @@ export default function ContactModal({ isOpen, onClose, dictionary, isRtl }: Con
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitted(true);
+    if (showToast) {
+      const msg = isRtl
+        ? `شكرًا لك يا ${formData.name}! تم إرسال رسالتك بنجاح. وسنقوم بالرد عليك قريبًا.`
+        : `Thank you, ${formData.name}! Your message has been sent successfully. Our support team will get back to you shortly.`;
+      showToast(msg, "success");
+    }
   };
 
   return (

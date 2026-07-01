@@ -9,6 +9,7 @@ interface RegistrationModalProps {
   allPrograms: Program[];
   dictionary: any;
   isRtl: boolean;
+  showToast?: (message: string, type?: "success" | "error" | "info") => void;
 }
 
 export default function RegistrationModal({
@@ -18,6 +19,7 @@ export default function RegistrationModal({
   allPrograms,
   dictionary,
   isRtl,
+  showToast,
 }: RegistrationModalProps) {
   const [currentStep, setCurrentStep] = useState(1);
   const [activeProgram, setActiveProgram] = useState<Program | null>(selectedProgram);
@@ -73,6 +75,16 @@ export default function RegistrationModal({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitted(true);
+    if (showToast) {
+      const msg = isRtl
+        ? `شكرًا لك يا ${formData.name}! تم تأكيد اشتراكك في ${
+            activeProgram ? activeProgram.titleAr : "برنامج النخبة المخصص"
+          } بنجاح.`
+        : `Thank you, ${formData.name}! Your customized order for ${
+            activeProgram ? activeProgram.titleEn : "Custom Elite Program"
+          } has been placed successfully.`;
+      showToast(msg, "success");
+    }
   };
 
   return (

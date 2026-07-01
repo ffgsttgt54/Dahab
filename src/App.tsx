@@ -34,6 +34,7 @@ import ContactModal from "./components/ContactModal";
 import ConsultationModal from "./components/ConsultationModal";
 import RecipeBookModal from "./components/RecipeBookModal";
 import WhoIsDurrahModal from "./components/WhoIsDurrahModal";
+import ToastContainer, { ToastMessage } from "./components/Toast";
 
 // Image asset imports
 import durrahHero from "./assets/images/durrah_hero_1782919258240.jpg";
@@ -64,6 +65,18 @@ export default function App() {
   const [isConsultationOpen, setIsConsultationOpen] = useState(false);
   const [isRecipeOpen, setIsRecipeOpen] = useState(false);
   const [isWhoDurrahOpen, setIsWhoDurrahOpen] = useState(false);
+
+  // Toast notification state
+  const [toasts, setToasts] = useState<ToastMessage[]>([]);
+
+  const showToast = (message: string, type: "success" | "error" | "info" = "success") => {
+    const id = Math.random().toString(36).substring(2, 9);
+    setToasts((prev) => [...prev, { id, message, type }]);
+  };
+
+  const removeToast = (id: string) => {
+    setToasts((prev) => prev.filter((t) => t.id !== id));
+  };
 
   const dict = DICTIONARY[lang];
   const isRtl = lang === "ar";
@@ -960,6 +973,7 @@ export default function App() {
         allPrograms={PROGRAMS_DATA}
         dictionary={dict}
         isRtl={isRtl}
+        showToast={showToast}
       />
 
       <ContactModal
@@ -967,6 +981,7 @@ export default function App() {
         onClose={() => setIsContactOpen(false)}
         dictionary={dict}
         isRtl={isRtl}
+        showToast={showToast}
       />
 
       <ConsultationModal
@@ -974,6 +989,7 @@ export default function App() {
         onClose={() => setIsConsultationOpen(false)}
         dictionary={dict}
         isRtl={isRtl}
+        showToast={showToast}
       />
 
       <RecipeBookModal
@@ -981,6 +997,7 @@ export default function App() {
         onClose={() => setIsRecipeOpen(false)}
         dictionary={dict}
         isRtl={isRtl}
+        showToast={showToast}
       />
 
       <WhoIsDurrahModal
@@ -989,6 +1006,9 @@ export default function App() {
         dictionary={dict}
         isRtl={isRtl}
       />
+
+      {/* TOAST CONTAINER */}
+      <ToastContainer toasts={toasts} removeToast={removeToast} isRtl={isRtl} />
     </div>
   );
 }
